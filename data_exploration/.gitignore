@@ -1,0 +1,8 @@
+# ipython
+.ipynb_checkpoints
+
+# venv
+/nyc-dead-animals-venv
+
+# Data files
+*.parquet

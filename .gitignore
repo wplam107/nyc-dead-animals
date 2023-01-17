@@ -1,2 +1,8 @@
 # Configs
 config.ini
+
+# Experimental
+/springboot
+
+# VSCode
+.vscode
