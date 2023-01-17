@@ -6,3 +6,6 @@ config.ini
 
 # VSCode
 .vscode
+
+# Mac
+.DS_Store
