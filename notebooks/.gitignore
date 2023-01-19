@@ -2,8 +2,11 @@
 .ipynb_checkpoints
 
 # venv
-/nyc-dead-animals-venv
+/env
 
 # Data files
 *.parquet
 *.json
+
+# Experiments
+test.ipynb
