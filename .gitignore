@@ -9,3 +9,6 @@ config.ini
 
 # Mac
 .DS_Store
+
+# Misc. Files and Resources
+/misc

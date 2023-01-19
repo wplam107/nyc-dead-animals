@@ -36,13 +36,14 @@ def query_socrata(event, context):
     storage_client = storage.Client(project=project_name)
     bucket = storage_client.bucket(bucket_name)
     md_blob = bucket.blob(metadata_name)
+    metadata = json.loads(md_blob.download_as_bytes())
 
     # Create Socrata client
     socrata_client = Socrata(domain=domain, app_token=app_token, timeout=60)
 
     # Check if there are new 311 Dead Animal complaints
     last_complaint = socrata_client.get(dataset_identifier=dataset, query=LAST_COMPLAINT_QUERY)[0]['created_date']
-    last_date = json.loads(md_blob.download_as_bytes())['last_date']
+    last_date = metadata['last_date']
     md_date = datetime.fromisoformat(last_date)
     lc_date = datetime.fromisoformat(last_complaint)
     should_pull = True if md_date != lc_date else False
@@ -86,7 +87,15 @@ def query_socrata(event, context):
         # Concat DataFrames and write to storage
         df = pd.concat([new_df, old_df])
         df.to_parquet(data_path)
-        print('Data Added: ' + datetime.today().isoformat('T', 'seconds'))
+        now = datetime.today().isoformat('T', 'seconds')
+        print('Data Added: ' + now)
+
+        # Rewrite metadata
+        metadata['last_date'] = new_df.iloc[0]['created_date'].isoformat()
+        metadata['last_pull'] = now
 
     else:
         print('No New Data: ' + datetime.today().isoformat('T', 'seconds'))
+
+    socrata_client.close()
+    storage_client.close()

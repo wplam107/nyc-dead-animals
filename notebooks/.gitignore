@@ -4,9 +4,8 @@
 # venv
 /env
 
-# Data files
-*.parquet
-*.json
+# Data
+/data
 
 # Experiments
 test.ipynb
